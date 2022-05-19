@@ -1,0 +1,177 @@
+{% include 'header.html' %}
+<div data-include="header.html"></div>
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-md-4">
+                    <h3 class="text-center mb-3 mt-5">Cek Resi Anda</h3>
+                    {% if session['track'] or session['errorTrack'] %}
+                        <form action="/index" method="post">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" name="awb" placeholder="Nomor Resi">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <select class="form-control" name="courier">
+                                            {% for list in courierLists %}
+                                                <option value="{{ list['code'] }}" style="text-transform: uppercase;">
+                                                    {{ list['code'] }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <button class="btn btn-primary btn-block">Cek</button>
+                                </div>
+                                <div class="col-md-6">
+                                    <a href="/clear-track" class="btn btn-danger btn-block">Clear</a>
+                                </div>
+                            </div>
+                        </form>
+                    {% else %}
+                        <form action="/index" method="post">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" name="awb" placeholder="Nomor Resi">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <select class="form-control" name="courier">
+                                            {% for list in courierLists %}
+                                                <option value="{{ list['code'] }}" style="text-transform: uppercase;">
+                                                    {{ list['code'] }}
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <button class="btn btn-primary btn-block">Cek</button>
+                                </div>
+                            </div>
+                        </form>
+                    {% endif %}
+                </div>
+            </div><!-- /.row -->
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+
+                    {% if session['errorTrack'] %}
+                        <div class="alert alert-danger mt-3" role="alert">
+                            {{ session['errorTrack'] }}
+                        </div>
+                    {% endif %}
+
+                    {% if session['track'] %}
+
+                    <h5 class="text-center mt-5 mb-3">
+                        Detail Resi Anda : {{ session['track']['awb'] }}
+                    </h5>
+
+                    <div class="table-responsive">
+                        <table class="table table-striped border rounded">
+                            <tbody>
+                                <tr>
+                                    <td style="width: 50px;">Kurir</td>
+                                    <td style="width: 5px;">:</td>
+                                    <td>{{ session['track']['courier'] }}</td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 50px;">Status</td>
+                                    <td style="width: 5px;">:</td>
+                                    <td>{{ session['track']['status'] }}</td>
+                                </tr>  
+                                <tr>
+                                    <td style="width: 50px;">Tanggal</td>
+                                    <td style="width: 5px;">:</td>
+                                    <td>{{ session['track']['date'] }}</td>
+                                </tr>  
+                                {% if session['track']['desc'] %}
+                                    <tr>
+                                        <td style="width: 50px;">Deskripsi</td>
+                                        <td style="width: 5px;">:</td>
+                                        <td>{{ session['track']['desc'] }}</td>
+                                    </tr> 
+                                {% endif %} 
+                                <tr>
+                                    <td style="width: 50px;">Jumlah</td>
+                                    <td style="width: 5px;">:</td>
+                                    <td>{{ session['track']['amount'] }}</td>
+                                </tr>  
+                                <tr>
+                                    <td style="width: 50px;">Berat</td>
+                                    <td style="width: 5px;">:</td>
+                                    <td>{{ session['track']['weight'] }}</td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 50px;">Detail</td>
+                                    <td style="width: 5px;">:</td>
+                                    <td>
+                                        <div>
+                                            <b>Asal</b> : {{ session['detail']['origin'] }}
+                                        </div>
+                                        <div>
+                                            <b>Tujuan</b> : {{ session['detail']['destination'] }}
+                                        </div>
+                                        <div>
+                                            <b>Pengirim</b> : {{ session['detail']['shipper'] }}
+                                        </div>
+                                        <div>
+                                            <b>Penerima</b> : {{ session['detail']['receiver'] }}
+                                        </div>
+                                    </td>
+                                </tr>  
+                                <tr>
+                                    <td style="width: 50px;">Perjalanan Paket</td>
+                                    <td style="width: 5px;">:</td>
+                                    <td>
+                                        <ul>
+                                            {% for history in session['history'] %}
+                                                <li>
+                                                    <div><b>Tanggal</b> : {{ history['date'] }}</div>
+                                                    <div>
+                                                    <b>Deskripsi : </b>
+                                                    <ul>
+                                                        <li>{{ history['desc'] }}</li>
+                                                    </ul>
+                                                    </div>
+                                                    <div><b>Lokasi</b> : {{ history['location'] }}</div>
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    
+                    {% endif %}
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+        </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+<div data-include="footer"></div>
+{% include 'footer.html' %}

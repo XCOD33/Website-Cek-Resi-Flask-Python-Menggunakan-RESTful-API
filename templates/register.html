@@ -1,0 +1,54 @@
+{% include 'layout.html' %}
+<div data-include="header.html"></div>
+    <!-- Content Header (Page header) -->
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+        <ol class="breadcrumb float-sm-right">
+          <li><a  class="btn btn-primary" href="/">Home</a></li>
+          <li>&ensp;</li>
+          <li><a  class="btn btn-primary" href="/login">Login</a></li>
+        </ol>
+    </div>
+  </div><!-- /.container-fluid -->
+</section>
+  <!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <!-- jquery validation -->
+        <div class="card card-primary">
+          <div class="card-header">
+            <h3 class="card-title">Register</h3>
+          </div>
+          <!-- /.card-header -->
+          <!-- form start -->
+          <form action="/register" method="POST">
+            <div class="card-body">
+              <div class="form-group">
+                <label for="exampleInputName1">Nama</label>
+                <input type="text" name="name" class="form-control" id="exampleInputName1" placeholder="Enter name">
+              <div class="form-group">
+                <label for="exampleInputEmail1">Email address</label>
+                <input type="email" name="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
+              </div>
+              <div class="form-group">
+                <label for="exampleInputPassword1">Password</label>
+                <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+              </div>
+            </div>
+            <!-- /.card-body -->
+            <div class="card-footer">
+              <button type="submit" class="btn btn-primary">Register</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+  <!-- /.content-wrapper -->
+  <div data-include="footer"></div>
+</div>
+{% include 'layoutfooter.html' %}
