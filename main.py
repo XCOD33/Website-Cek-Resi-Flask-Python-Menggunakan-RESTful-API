@@ -88,6 +88,9 @@ def index():
         if json_data['status'] == 400:
             session['errorTrack'] = 'Nomor resi tidak valid !'
 
+            if 'track' in session:
+                session.pop('track', Undefined)
+
             return redirect(url_for('index'))
 
         track = json_data['data']['summary']
@@ -98,7 +101,7 @@ def index():
         session['detail'] = detail
         session['history'] = history
 
-        if session['errorTrack']:
+        if 'errorTrack' in session:
             session.pop('errorTrack', Undefined)
 
         return redirect(url_for('index'))

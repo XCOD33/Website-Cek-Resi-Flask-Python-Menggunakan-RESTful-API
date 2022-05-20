@@ -137,10 +137,11 @@ p {
     margin: 0 auto;
 }
 
-.kartu-tutor img {
-    width: 80%;
-    border-radius: 50%;
+.fototawarari {
+    width : 120px;
+    border-radius : 100px;
 }
+
 
 .kartu-tutor p {
     font-family: 'comic sans ms';
@@ -163,7 +164,7 @@ p {
 }
 
 .kartu-partner img {
-    width: 150px;
+    width: 50%;
     border-radius: 50%;
 }
 

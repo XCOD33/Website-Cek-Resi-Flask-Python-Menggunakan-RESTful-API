@@ -106,16 +106,21 @@
                                         <td>{{ session['track']['desc'] }}</td>
                                     </tr> 
                                 {% endif %} 
-                                <tr>
-                                    <td style="width: 50px;">Jumlah</td>
-                                    <td style="width: 5px;">:</td>
-                                    <td>{{ session['track']['amount'] }}</td>
-                                </tr>  
-                                <tr>
-                                    <td style="width: 50px;">Berat</td>
-                                    <td style="width: 5px;">:</td>
-                                    <td>{{ session['track']['weight'] }}</td>
-                                </tr>
+                                {% if session['track']['jumlah'] %}
+                                    <tr>
+                                        <td style="width: 50px;">Jumlah</td>
+                                        <td style="width: 5px;">:</td>
+                                        <td>{{ session['track']['jumlah'] }}</td>
+                                    </tr> 
+                                {% endif %} 
+                                {% if session['track']['weight'] %}
+                                    <tr>
+                                        <td style="width: 50px;">Berat</td>
+                                        <td style="width: 5px;">:</td>
+                                        <td>{{ session['track']['weight'] }}</td>
+                                    </tr> 
+                                {% endif %} 
+                                {% if session['detail']['origin'] %}
                                 <tr>
                                     <td style="width: 50px;">Detail</td>
                                     <td style="width: 5px;">:</td>
@@ -133,7 +138,8 @@
                                             <b>Penerima</b> : {{ session['detail']['receiver'] }}
                                         </div>
                                     </td>
-                                </tr>  
+                                </tr>
+                                {% endif %}
                                 <tr>
                                     <td style="width: 50px;">Perjalanan Paket</td>
                                     <td style="width: 5px;">:</td>
