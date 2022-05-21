@@ -1,0 +1,102 @@
+{% include 'header.html' %}
+<div data-include="header.html"></div>
+<div class="content-wrapper">
+    <div class="content-header">
+        <div class="container-fluid">
+
+            <!-- card form edit -->
+            <div class="row justify-content-center">
+                <div class="col-6">
+
+                    {% if success %}
+                        <div class="alert alert-success" role="alert">
+                            {{ success }}
+                        </div>
+                    {% endif %}
+
+                    {% if error %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ error }}
+                        </div>
+                    {% endif %}
+
+                    {% if session['error'] %}
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            {{ session['error'] }}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    {% endif %}
+
+                    <div class="card">
+                        <div class="card-header text-center bg-primary">
+                            <h3 class="mb-0 h5 font-weight-bolder">Profile</h3>       
+                        </div>
+                        <form action="/profile" method="post">
+                            <div class="card-body">
+                                    <div class="form-group">
+                                        <label for="name">Full Name</label>
+                                        <input type="text" name="name" id="name" value="{{ session['name'] }}" class="form-control" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="email">Email Address</label>
+                                        <input type="text" name="email" id="email" value="{{ session['email'] }}" class="form-control" required>
+                                    </div>
+                                    <p class="h6 mt-5 font-weight-bold">Change Password</p>
+                                    <div class="form-group">
+                                        <input type="password" name="old_password" id="old_password" class="form-control" placeholder="Old Password">
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="password" name="new_password" id="new_password" class="form-control" placeholder="New Password">
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <div class="d-flex justify-content-end">
+                                        <button type="submit" class="btn btn-success">Submit</button>
+                                    </div>
+                                </div>
+                            </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- card form delete -->
+            <div class="row justify-content-center mt-3">
+                <div class="col-6">
+                    <div class="card">
+                        <div class="card-header text-center bg-primary">
+                            <h3 class="mb-0 h5 font-weight-bolder">Optional</h3>
+                        </div>
+                        <form action="/delete" method="post">
+                            <div class="card-body">
+                                <p class="mb-0 text-danger font-weight-bold"><input type="checkbox" name="delete" id="delete"> &nbsp; Delete my data</p>
+                                <!-- <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <input type="checkbox" aria-label="Checkbox for following text input" name="delete">
+                                        </div>
+                                    </div>
+                                    <input type="text" class="form-control" aria-label="Text input with checkbox" value="Delete my data" readonly>
+                                </div> -->
+                            </div>
+                            <div class="card-footer">
+                                <div class="d-flex justify-content-end">
+                                    <button type="submit" class="btn btn-danger">Comfirm Delete</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+
+            <section class="content">
+                <div class="container-fluid">
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+<div data-include="footer"></div>
+{% include 'footer.html' %}

@@ -6,6 +6,7 @@ import mysql.connector
 import requests
 import json
 
+
 app = Flask(__name__)
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
@@ -31,17 +32,20 @@ def login():
         user = curl.fetchone()
         curl.close()
 
-        if len(user) > 0:
+        if user:
             if bcrypt.hashpw(password, user["password"].encode('utf-8')) == user["password"].encode('utf-8'):
                 session['name'] = user['name']
                 session['email'] = user['email']
                 return redirect(url_for('index'))
             else:
-                return "Error user not found"
+                error = "Email & password doesn't match"
+                return render_template('login.html', error=error)
         else:
-            return "Error user not found"
-    else:
-        return render_template('login.html')
+            error = "User not found"
+            return render_template('login.html', error=error)
+    if request.method == 'GET' and 'name' in session:
+        return redirect(url_for('index'))
+    return render_template('login.html')
 
 @app.route('/logout', methods=["GET", "POST"])
 def logout():
@@ -50,9 +54,7 @@ def logout():
 
 @app.route('/register', methods=["GET", "POST"])
 def register():
-    if request.method == 'GET':
-        return render_template("register.html")
-    else:
+    if request.method == 'POST':
         name = request.form['name']
         email = request.form['email']
         password = request.form['password'].encode('utf-8')
@@ -63,7 +65,13 @@ def register():
         mysql.connection.commit()
         session['name'] = request.form['name']
         session['email'] = request.form['email']
+        
         return redirect(url_for('login'))
+        
+    if request.method == 'GET' and 'name' in session:
+        return redirect(url_for('index'))
+
+    return render_template("register.html")
     
 ###index
 @app.route('/index', methods = ['POST', 'GET'])
@@ -107,6 +115,87 @@ def index():
         return redirect(url_for('index'))
 
     return redirect(url_for('login'))
+
+@app.route('/profile', methods=['POST','GET'])
+def profile():
+    if request.method == 'POST':
+        name = request.form['name']
+        email = request.form['email']
+        old_password = request.form['old_password']
+        new_password = request.form['new_password']
+
+        # mencari data user yang sedang login
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT * FROM users WHERE email=%s", [session['email']])
+        user = cur.fetchone()
+        cur.close()
+
+        # jika password ingin diubah / form password ada isi
+        if old_password != '':
+            
+            # dilakukan encode ke utf-8 agar bisa dilakukan pengecekan
+            old_password = request.form['old_password'].encode('utf-8')
+
+            # pengecekan apakah old password sama dengan password yang ada di database
+            if bcrypt.hashpw(old_password, user["password"].encode('utf-8')) == user["password"].encode('utf-8') and new_password != '':
+                # jika sama maka form new_password akan dienkripsi
+                new_password = request.form['new_password'].encode('utf-8')
+                hash_password = bcrypt.hashpw(new_password, bcrypt.gensalt())
+
+                # semua form (name, email, password) akan dimasukkan ke database
+                cur = mysql.connection.cursor()
+                cur.execute("UPDATE users SET name=%s, email=%s, password=%s WHERE email=%s", (name, email, hash_password, session['email']))
+                mysql.connection.commit()
+                cur.close()
+
+                # session baru diberikan
+                session['name'] = name
+                session['email'] = email
+
+                success = "Data has been updated"
+
+                return render_template('profile.html', success=success)
+            # jika password old_password salah atau form password baru kosong
+            error = 'The old password is wrong or the new password is blank!'
+            return render_template('profile.html', error=error)
+
+        # jika yang akan diubah hanya nama dan email atau salah satunya
+        cur = mysql.connection.cursor()
+        cur.execute("UPDATE users SET name=%s, email=%s WHERE email=%s", (name, email, user['email']))
+        mysql.connection.commit()
+        cur.close()
+
+
+        session['name'] = name
+        session['email'] = email
+
+        success = "Data has been updated"
+
+        return render_template('profile.html', success=success)
+    else:
+        return render_template('profile.html')
+
+@app.route("/delete", methods=['POST'])
+def delete():
+
+    if 'delete' in request.form:
+        # mencari data user yang sedang login
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT * FROM users WHERE email=%s", [session['email']])
+        user = cur.fetchone()
+        cur.close()
+
+        # lakukan delete
+        cur = mysql.connection.cursor()
+        cur.execute("DELETE FROM users WHERE email=%s", [user['email']])
+        mysql.connection.commit()
+        cur.close()
+
+        session.clear()
+        return redirect(url_for('main'))
+    else:
+        session['error'] = "Please tick on 'Delete my data' !"
+        return redirect(url_for('profile'))
 
 @app.route('/clear-track')
 def clearTrack():
