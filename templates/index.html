@@ -11,17 +11,17 @@
                     {% if session['track'] or session['errorTrack'] %}
                         <form action="/index" method="post">
                             <div class="row">
-                                <div class="col-md-9">
+                                <div class="col-md-12">
                                     <div class="form-group">
                                         <input type="text" class="form-control" name="awb" placeholder="Nomor Resi">
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-12">
                                     <div class="form-group">
                                         <select class="form-control" name="courier">
                                             {% for list in courierLists %}
                                                 <option value="{{ list['code'] }}" style="text-transform: uppercase;">
-                                                    {{ list['code'] }}
+                                                    {{ list['description'] }}
                                                 </option>
                                             {% endfor %}
                                         </select>
@@ -30,27 +30,27 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
-                                    <button class="btn btn-primary btn-block">Cek</button>
+                                    <button class="btn btn-primary btn-block btn-lg">Cek</button>
                                 </div>
                                 <div class="col-md-6">
-                                    <a href="/clear-track" class="btn btn-danger btn-block">Clear</a>
+                                    <a href="/clear-track" class="btn btn-danger btn-block btn-lg">Clear</a>
                                 </div>
                             </div>
                         </form>
                     {% else %}
                         <form action="/index" method="post">
                             <div class="row">
-                                <div class="col-md-9">
+                                <div class="col-md-12">
                                     <div class="form-group">
                                         <input type="text" class="form-control" name="awb" placeholder="Nomor Resi">
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-12">
                                     <div class="form-group">
                                         <select class="form-control" name="courier">
                                             {% for list in courierLists %}
                                                 <option value="{{ list['code'] }}" style="text-transform: uppercase;">
-                                                    {{ list['code'] }}
+                                                    {{ list['description'] }}
                                                 </option>
                                             {% endfor %}
                                         </select>
@@ -59,7 +59,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <button class="btn btn-primary btn-block">Cek</button>
+                                    <button class="btn btn-primary btn-block btn-lg">Cek</button>
                                 </div>
                             </div>
                         </form>
