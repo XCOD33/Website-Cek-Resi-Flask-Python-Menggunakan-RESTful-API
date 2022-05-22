@@ -2,7 +2,6 @@ from flask import Flask, render_template, request, redirect, request, url_for, s
 from flask_mysqldb import MySQL, MySQLdb
 import bcrypt
 from jinja2 import Undefined
-import mysql.connector
 import requests
 import json
 
@@ -204,5 +203,5 @@ def clearTrack():
     return redirect(url_for('index'))
 
 if __name__=="__main__":
-    app.run(debug = True)
+    app.run(debug=False, host='0.0.0.0')
 
