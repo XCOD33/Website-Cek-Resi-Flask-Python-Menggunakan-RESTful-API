@@ -1,0 +1,118 @@
+{% include 'header.html' %}
+<div data-include="header.html"></div>
+<div class="content-wrapper">
+    <div class="content-header">
+        <div class="container-fluid">
+
+            <!-- card history -->
+            <div class="row justify-content-center mt-5">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="text-center mb-0">
+                                Detail Resi Anda : {{ track['awb'] }}
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped border rounded">
+                                    <tbody>
+                                        <tr>
+                                            <td style="width: 50px;">Kurir</td>
+                                            <td style="width: 5px;">:</td>
+                                            <td>{{ track['courier'] }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 50px;">Status</td>
+                                            <td style="width: 5px;">:</td>
+                                            <td>{{ track['status'] }}</td>
+                                        </tr>  
+                                        <tr>
+                                            <td style="width: 50px;">Tanggal</td>
+                                            <td style="width: 5px;">:</td>
+                                            <td>{{ track['date'] }}</td>
+                                        </tr>  
+                                        {% if track['desc'] %}
+                                            <tr>
+                                                <td style="width: 50px;">Deskripsi</td>
+                                                <td style="width: 5px;">:</td>
+                                                <td>{{ track['desc'] }}</td>
+                                            </tr> 
+                                        {% endif %} 
+                                        {% if track['jumlah'] %}
+                                            <tr>
+                                                <td style="width: 50px;">Jumlah</td>
+                                                <td style="width: 5px;">:</td>
+                                                <td>{{ track['jumlah'] }}</td>
+                                            </tr> 
+                                        {% endif %} 
+                                        {% if track['weight'] %}
+                                            <tr>
+                                                <td style="width: 50px;">Berat</td>
+                                                <td style="width: 5px;">:</td>
+                                                <td>{{ track['weight'] }}</td>
+                                            </tr> 
+                                        {% endif %} 
+                                        {% if detail['origin'] %}
+                                        <tr>
+                                            <td style="width: 50px;">Detail</td>
+                                            <td style="width: 5px;">:</td>
+                                            <td>
+                                                <div>
+                                                    <b>Asal</b> : {{ detail['origin'] }}
+                                                </div>
+                                                <div>
+                                                    <b>Tujuan</b> : {{ detail['destination'] }}
+                                                </div>
+                                                <div>
+                                                    <b>Pengirim</b> : {{ detail['shipper'] }}
+                                                </div>
+                                                <div>
+                                                    <b>Penerima</b> : {{ detail['receiver'] }}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {% endif %}
+                                        <tr>
+                                            <td style="width: 50px;">Perjalanan Paket</td>
+                                            <td style="width: 5px;">:</td>
+                                            <td>
+                                                <ul>
+                                                    {% for history in histories %}
+                                                        <li>
+                                                            <div><b>Tanggal</b> : {{ history['date'] }}</div>
+                                                            <div>
+                                                            <b>Deskripsi : </b>
+                                                            <ul>
+                                                                <li>{{ history['desc'] }}</li>
+                                                            </ul>
+                                                            </div>
+                                                            <div><b>Lokasi</b> : {{ history['location'] }}</div>
+                                                        </li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a href="/trash/{{ track['awb'] }}" class="btn btn-danger btn-block">Delete Resi</a>
+                        </div>
+                    </div>
+
+                   
+                    
+                </div>
+            </div>
+
+            <section class="content">
+                <div class="container-fluid">
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+<div data-include="footer"></div>
+{% include 'footer.html' %}

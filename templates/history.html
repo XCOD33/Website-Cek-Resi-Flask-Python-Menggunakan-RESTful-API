@@ -24,14 +24,26 @@
                                     </thead>
                                     <tbody>
                                         {% for history in histories %}
+                                        {% if history['visibility'] == 'YES' %}
+                                            <tr>
+                                                <td>{{ loop.index }}</td>
+                                                <td>{{ history['no_resi'] }}</td>
+                                                <td>{{ history['time'] }}</td>
+                                                <td>
+                                                    <a href="/history/{{ history['no_resi'] }}" class="btn btn-sm btn-success">Details</a>
+                                                </td>
+                                            </tr>
+                                        {% else %}
                                         <tr>
                                             <td>{{ loop.index }}</td>
                                             <td>{{ history['no_resi'] }}</td>
                                             <td>{{ history['time'] }}</td>
                                             <td>
-                                                <a href="/history/{{ history['no_resi'] }}" class="btn btn-sm btn-success">Details ></a>
+                                                <a class="btn btn-sm btn-secondary disabled">Deleted</a>
                                             </td>
                                         </tr>
+                                        {% endif %}
+
                                         {% endfor %}
                                     </tbody>
                                 </table>

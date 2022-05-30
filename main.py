@@ -93,16 +93,17 @@ def index():
 
         # check has checked resi
         cur = mysql.connection.cursor()
-        cur.execute("SELECT * FROM history_user")
+        cur.execute("SELECT * FROM history_user WHERE no_resi=%s AND visibility='YES'", [awb])
         resi = cur.fetchone()
         cur.close()
 
         if resi:
+            if 'errorTrack' in session:
+                session.pop('errorTrack', Undefined)
 
             data = resi['data']
             data = data.replace("\'", "\"")
             data = json.loads(data)
-            print(data)
 
             track = data['data']['summary']
             detail = data['data']['detail']
@@ -217,6 +218,40 @@ def history():
         return render_template("history.html", histories=history)
 
     return redirect(url_for('main'))
+
+
+@app.route("/history/<noresi>", methods=['GET'])
+def historyDetails(noresi):
+    if 'name' in session:
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT * FROM history_user WHERE no_resi=%s AND visibility='YES'", [noresi])
+        resi = cur.fetchone()
+        cur.close()
+
+        if resi:
+            data = resi['data']
+            data = data.replace("\'", "\"")
+            data = json.loads(data)
+
+            track = data['data']['summary']
+            detail = data['data']['detail']
+            history = data['data']['history']
+
+            return render_template('history-details.html', track=track,detail=detail,histories=history)
+
+
+    return redirect(url_for('main'))
+
+@app.route('/trash/<noresi>')
+def trash(noresi):
+    if 'name' in session:
+        cur = mysql.connection.cursor()
+        cur.execute("UPDATE history_user SET visibility='NO' WHERE no_resi=%s", [noresi])
+        mysql.connection.commit()
+        cur.close()
+        return redirect(url_for('history'))
+
+    return redirect(url_for('index'))
 
 
 
