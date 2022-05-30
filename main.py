@@ -4,6 +4,9 @@ import bcrypt
 from jinja2 import Undefined
 import requests
 import json
+from pprint import pprint
+from datetime import datetime
+import pytz
 
 
 app = Flask(__name__)
@@ -15,6 +18,9 @@ app.config['SECRET_KEY'] = 'gbfg[bpfgbfgbkfgbjgbfgbghj'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 mysql = MySQL(app)
 
+# datetime Indonesia
+now = datetime.now()
+idTime = now.astimezone(pytz.timezone('Asia/Jakarta')).strftime("%d/%m/%Y %H:%M:%S")
 
 @app.route('/')
 def main():
@@ -33,6 +39,7 @@ def login():
 
         if user:
             if bcrypt.hashpw(password, user["password"].encode('utf-8')) == user["password"].encode('utf-8'):
+                session['id'] = user['id']
                 session['name'] = user['name']
                 session['email'] = user['email']
                 return redirect(url_for('index'))
@@ -62,8 +69,6 @@ def register():
         cur = mysql.connection.cursor()
         cur.execute("INSERT INTO users (name, email, password) VALUES (%s,%s,%s)",(name,email,hash_password,))
         mysql.connection.commit()
-        session['name'] = request.form['name']
-        session['email'] = request.form['email']
         
         return redirect(url_for('login'))
         
@@ -88,7 +93,6 @@ def index():
 
         api = f'https://api.binderbyte.com/v1/track?api_key=3af0284cc24c7ac90e374cdb6abb62dcb2753e882bfa02db2f7b0289f27938c3&courier={courier}&awb={awb}'
         req = requests.get(api)
-
         data = req.content
         json_data = json.loads(data)
 
@@ -110,6 +114,11 @@ def index():
 
         if 'errorTrack' in session:
             session.pop('errorTrack', Undefined)
+
+        cur = mysql.connection.cursor()
+        cur.execute("INSERT INTO history_user (no_resi, user_id, data, time) VALUES (%s, %s, %s, %s)", (session['track']['awb'], session['id'], json_data, idTime))
+        mysql.connection.commit()
+        cur.close()
 
         return redirect(url_for('index'))
 
@@ -174,6 +183,20 @@ def profile():
     else:
         return render_template('profile.html')
 
+@app.route("/history", methods=['GET'])
+def history():
+    if 'name' in session:
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT * FROM history_user INNER JOIN users ON history_user.user_id = users.id")
+        history = cur.fetchall()
+        cur.close()
+
+        return render_template("history.html", histories=history)
+
+    return redirect(url_for('main'))
+
+
+
 @app.route("/delete", methods=['POST'])
 def delete():
 
@@ -203,5 +226,5 @@ def clearTrack():
     return redirect(url_for('index'))
 
 if __name__=="__main__":
-    app.run(debug=False, host='0.0.0.0')
+    app.run(debug=True)
 
