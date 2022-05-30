@@ -247,4 +247,9 @@ h3 {
     .kartu-partner {
         width: 50%;
     }
+
+    .footer-section {
+        width: 50%;
+        text-align: center;
+    }
 }

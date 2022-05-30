@@ -15,14 +15,14 @@
                             <div class="table-responsive">
                                 <table class="table table-striped">
                                     <thead class="thead-dark">
-                                        <tr>
+                                        <tr class="text-center">
                                             <th scope="col">#</th>
                                             <th scope="col">No Resi</th>
                                             <th scope="col">Date</th>
                                             <th scope="col">Details</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody class="text-center">
                                         {% for history in histories %}
                                         {% if history['visibility'] == 'YES' %}
                                             <tr>

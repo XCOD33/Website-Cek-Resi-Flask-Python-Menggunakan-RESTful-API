@@ -211,7 +211,7 @@ def profile():
 def history():
     if 'name' in session:
         cur = mysql.connection.cursor()
-        cur.execute("SELECT * FROM history_user INNER JOIN users ON history_user.user_id = users.id")
+        cur.execute("SELECT * FROM history_user INNER JOIN users ON history_user.user_id = users.id WHERE users.id=%s", [session['id']])
         history = cur.fetchall()
         cur.close()
 
