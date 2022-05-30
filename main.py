@@ -91,6 +91,29 @@ def index():
         courier = request.form["courier"]
         awb = request.form["awb"]
 
+        # check has checked resi
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT * FROM history_user")
+        resi = cur.fetchone()
+        cur.close()
+
+        if resi:
+
+            data = resi['data']
+            data = data.replace("\'", "\"")
+            data = json.loads(data)
+            print(data)
+
+            track = data['data']['summary']
+            detail = data['data']['detail']
+            history = data['data']['history']
+
+            session['track'] = track
+            session['detail'] = detail
+            session['history'] = history
+
+            return redirect(url_for('index'))
+
         api = f'https://api.binderbyte.com/v1/track?api_key=3af0284cc24c7ac90e374cdb6abb62dcb2753e882bfa02db2f7b0289f27938c3&courier={courier}&awb={awb}'
         req = requests.get(api)
         data = req.content
