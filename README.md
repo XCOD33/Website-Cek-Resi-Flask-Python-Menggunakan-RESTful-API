@@ -1,3 +1,3 @@
 ## Design Database
 
-![database : rw-cek-resi](https://res.cloudinary.com/xcod33/image/upload/v1684306688/Diagram/desain-database-rw-cek-resi_mcbjgd.png)
+<iframe width="560" height="315" src='https://dbdiagram.io/embed/64647a7cdca9fb07c43b6912'> </iframe>
