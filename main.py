@@ -20,7 +20,7 @@ mysql = MySQL(app)
 
 # datetime Indonesia
 now = datetime.now()
-idTime = now.astimezone(pytz.timezone('Asia/Jakarta')).strftime("%d/%m/%Y %H:%M:%S")
+idTime = now.astimezone(pytz.timezone('Asia/Jakarta')).strftime("%Y-%m-%d %H:%M:%S")
 
 @app.route('/')
 def main():
